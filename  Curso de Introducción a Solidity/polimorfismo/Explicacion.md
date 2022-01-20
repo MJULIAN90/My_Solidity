@@ -1,0 +1,1 @@
+el archivo polimorfismo lo que hace es instanciar el contracto herencia y usar la funcion que el ya posee asi no tiene que volver a inicializar una interfaz sino que simplemente usa su funcionalidad.
