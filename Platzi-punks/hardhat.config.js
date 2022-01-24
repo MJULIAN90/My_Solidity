@@ -1,4 +1,8 @@
 require("@nomiclabs/hardhat-waffle");
+require("dotenv").config();
+
+const proyectId = process.env.INFURA_PROYECT_ID;
+const privateKey = process.env.DEPLOYER_SIGNER_PRIVATE_KEY;
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -24,10 +28,8 @@ module.exports = {
   solidity: "0.8.4",
   networks: {
     rinkeby: {
-      url: "https://rinkeby.infura.io/v3/210932d4e8fe46c39edee1b3a02ce2fa",
-      accounts: [
-        "0x043ee9c39ca2c1da081856039eafaf5e50d51181729fa54c09ff5317d1c8d0b1",
-      ],
+      url: `https://rinkeby.infura.io/v3/${proyectId}`,
+      accounts: [privateKey],
     },
   },
 };
