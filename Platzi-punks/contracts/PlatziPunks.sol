@@ -11,19 +11,19 @@ contract PlatziPunks is ERC721 , ERC721Enumerable{
 
     using Counters for Counters.Counter;
 
-    Counters.Counters private _idCounter;
-    uint256 public masSupply;
+    Counters.Counter private _idCounter;
+    uint256 public maxSupply;
 
     constructor (uint256 _maxSupply) ERC721('PlatziPunks', 'PLPKS'){
-        maxSupply = _maxSupply
+        maxSupply = _maxSupply;
     }
 
     function mint () public{
         uint256 current = _idCounter.current();
 
-         require (current < maxSupply , "No platzy left")
+         require (current < maxSupply , "No platzy left");
          _safeMint (msg.sender , current);
-         _idCounter.increment()
+         _idCounter.increment();
         
     }
 
