@@ -1,71 +1,43 @@
-//SPDX-License-Identifier: MIT
-
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "./Base64.sol";
 import "./PlatziPunksDNA.sol";
 
-contract PlatziPunks is ERC721 , ERC721Enumerable, PlatziPunksDNA{
-
+contract PlatziPunks is ERC721, ERC721Enumerable, PlatziPunksDNA {
     using Counters for Counters.Counter;
+    using Strings for uint256;
 
     Counters.Counter private _idCounter;
     uint256 public maxSupply;
-    mapping (uint256 => uint256) public tokenDNA;
+    mapping(uint256 => uint256) public tokenDNA;
 
-    constructor (uint256 _maxSupply) ERC721('PlatziPunks', 'PLPKS'){
+    constructor(uint256 _maxSupply) ERC721("PlatziPunks", "PLPKS") {
         maxSupply = _maxSupply;
     }
 
-    function mint () public{
+    function mint() public {
         uint256 current = _idCounter.current();
+        require(current < maxSupply, "No PlatziPunks left :(");
 
-         require (current < maxSupply , "No platzy left");
-
-         tokenDNA[current] = deterministicPseudoRandomDNA(current, msg.sender);
-         _safeMint (msg.sender , current);
-         _idCounter.increment();
-        
+        tokenDNA[current] = deterministicPseudoRandomDNA(current, msg.sender);
+        _safeMint(msg.sender, current);
+        _idCounter.increment();
     }
 
-
-
-     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
-        super._beforeTokenTransfer(from, to, tokenId);
+    function _baseURI() internal pure override returns (string memory) {
+        return "https://avataaars.io/";
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721Enumerable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }
+    function _paramsURI(uint256 _dna) internal view returns (string memory) {
+        string memory params;
 
-    function _baseURI()
-        internal
-        pure 
-        override
-        returns(string memory)
-     {
-        return 'https://avataaars.io/';
-    }
-
-    function _paramsURI( uint256 _dna)
-        internal
-        view
-        returns(string memory)
-    {
-            string memory params;
-
-            {params = string(
+        {
+            params = string(
                 abi.encodePacked(
                     "accessoriesType=",
                     getAccessoriesType(_dna),
@@ -91,27 +63,19 @@ contract PlatziPunks is ERC721 , ERC721Enumerable, PlatziPunksDNA{
                     getMouthType(_dna),
                     "&skinColor=",
                     getSkinColor(_dna)
-                    
                 )
             );
-            }
+        }
 
-            
-        return string(abi.encodePacked(params, "&topType=",getTopType(_dna)));
-        
+        return string(abi.encodePacked(params, "&topType=", getTopType(_dna)));
     }
 
-    function imageByDNA(uint256  _dna) 
-        public
-        view
-        returns(string memory){
+    function imageByDNA(uint256 _dna) public view returns (string memory) {
+        string memory baseURI = _baseURI();
+        string memory paramsURI = _paramsURI(_dna);
 
-            string memory baseURI = _baseURI();
-            string memory paramsURI = _paramsURI(_dna);
-
-        return string (abi.encodePacked(baseURI, "?", paramsURI));
+        return string(abi.encodePacked(baseURI, "?", paramsURI));
     }
-    
 
     function tokenURI(uint256 tokenId)
         public
@@ -130,14 +94,32 @@ contract PlatziPunks is ERC721 , ERC721Enumerable, PlatziPunksDNA{
         string memory jsonURI = Base64.encode(
             abi.encodePacked(
                 '{ "name": "PlatziPunks #',
-                tokenId,
+                tokenId.toString(),
                 '", "description": "Platzi Punks are randomized Avataaars stored on chain to teach DApp development on Platzi", "image": "',
                 image,
                 '"}'
             )
         );
 
-        return string(abi.encodePacked("data:application/json;base64,", jsonURI));
+        return
+            string(abi.encodePacked("data:application/json;base64,", jsonURI));
     }
 
-} 
+    // Override required
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+}

@@ -34,7 +34,7 @@ describe("Platzi Punks Contract", () => {
       expect(ownerOfMinted).to.equal(owner.address);
     });
 
-    it("Has a minting limit", async () => {
+    xit("Has a minting limit", async () => {
       const maxSupply = 2;
 
       const { deployed } = await setup({ maxSupply });
@@ -49,7 +49,7 @@ describe("Platzi Punks Contract", () => {
     });
   });
 
-  describe("tokenURI", () => {
+  xdescribe("tokenURI", () => {
     it("returns valid metadata", async () => {
       const { deployed } = await setup({});
 
