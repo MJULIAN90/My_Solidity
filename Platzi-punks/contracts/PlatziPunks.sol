@@ -16,13 +16,13 @@ contract PlatziPunks is ERC721, ERC721Enumerable, PlatziPunksDNA {
     uint256 public maxSupply;
     mapping(uint256 => uint256) public tokenDNA;
 
-    constructor(uint256 _maxSupply) ERC721("PlatziPunks", "PLPKS") {
+    constructor(uint256 _maxSupply) ERC721("Rocket_Avatar", "RTA") {
         maxSupply = _maxSupply;
     }
 
     function mint() public {
         uint256 current = _idCounter.current();
-        require(current < maxSupply, "No PlatziPunks left :(");
+        require(current < maxSupply, "No hay avatar disponibles :(");
 
         tokenDNA[current] = deterministicPseudoRandomDNA(current, msg.sender);
         _safeMint(msg.sender, current);
@@ -93,9 +93,9 @@ contract PlatziPunks is ERC721, ERC721Enumerable, PlatziPunksDNA {
 
         string memory jsonURI = Base64.encode(
             abi.encodePacked(
-                '{ "name": "PlatziPunks #',
+                '{ "name": "Rocket Avatar #',
                 tokenId.toString(),
-                '", "description": "Platzi Punks are randomized Avataaars stored on chain to teach DApp development on Platzi", "image": "',
+                '", "description": "NFTS RANDOM BY ROCKET AVATARS", "image": "',
                 image,
                 '"}'
             )

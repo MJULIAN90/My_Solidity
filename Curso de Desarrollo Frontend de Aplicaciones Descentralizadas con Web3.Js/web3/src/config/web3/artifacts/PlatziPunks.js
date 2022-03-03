@@ -1,6 +1,6 @@
 const PlatziPunksArtifact = {
   address: {
-    4: "0xe04956b7DFd2408299ed870f24A47608E1fe81bb",
+    4: "0x65E2D0E82203451a708DF3320328B13BEa00A9a5",
   },
   abi: [
     {

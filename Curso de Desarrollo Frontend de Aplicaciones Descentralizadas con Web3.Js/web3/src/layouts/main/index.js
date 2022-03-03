@@ -29,11 +29,11 @@ const MainLayout = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Flex minH="100vh" direction="column">
+    <Flex minH='100vh' direction='column'>
       <Box
-        mx="auto"
+        mx='auto'
         maxW={"7xl"}
-        width="100%"
+        width='100%'
         bg={useColorModeValue("white", "gray.800")}
         px={4}
       >
@@ -57,16 +57,18 @@ const MainLayout = ({ children }) => {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={"center"}>
-            <Flex alignItems="center">
-              <Image src="./rocketXchange-Amarillo.jpeg" width="80px" />
-              <Heading size="md" color="purple" mt={0.2} ml={1}>
-                Punks
+            <Flex alignItems='center'>
+              <Image src='./rocketXchange-black.png' width='120px' />
+              <Heading size='md' color='black' mt={0} ml={3}>
+                RocketAvatars
               </Heading>
             </Flex>
             <HStack
               as={"nav"}
               spacing={4}
               display={{ base: "none", md: "flex" }}
+              fontSize={20}
+              fontWeight={600}
             >
               {Links.map(({ name, to }) => (
                 <NavLink key={name} to={to}>
@@ -90,7 +92,7 @@ const MainLayout = ({ children }) => {
           </Box>
         ) : null}
       </Box>
-      <Box mx="auto" flex={1} p={4} maxW={"7xl"} width="100%">
+      <Box mx='auto' flex={1} p={4} maxW={"7xl"} width='100%'>
         {children}
       </Box>
       <Footer />

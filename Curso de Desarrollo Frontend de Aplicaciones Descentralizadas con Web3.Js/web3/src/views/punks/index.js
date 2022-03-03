@@ -17,12 +17,11 @@ import RequestAccess from "../../components/request-access";
 import { usePlatziPunksData } from "../../hooks/usePlatziPunksData";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const Punks = () => {
   const { search } = useLocation();
   const navigate = useNavigate();
-
   const [address, setAddress] = useState(
     new URLSearchParams(search).get("address")
   );
@@ -38,15 +37,24 @@ const Punks = () => {
     setSubmitted(false);
     setValidAddress(false);
   };
-
   const submit = (event) => {
     event.preventDefault();
-
     if (address) {
       const isValid = library.utils.isAddress(address);
       setValidAddress(isValid);
       setSubmitted(true);
-      if (isValid) navigate(`/punks?address=${address}`);
+      if (isValid){
+        navigate(`/punks?address=${address}`)};
+      if (!isValid){
+        Swal.fire({
+        title: 'Dirección inválida!',
+        imageUrl: 'https://unsplash.it/400/200',
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+      })
+      setAddress('') 
+      }
     } else {
       navigate("/punks");
     }
@@ -75,9 +83,7 @@ const Punks = () => {
               </Button>
             </InputRightElement>
           </InputGroup>
-          {submitted && !validAddress && (
-            <FormHelperText>Dirección inválida</FormHelperText>
-          )}
+        
         </FormControl>
       </form>
       {loading ? (
