@@ -49,7 +49,7 @@ describe("Platzi Punks Contract", () => {
     });
   });
 
-  xdescribe("tokenURI", () => {
+  describe("tokenURI", () => {
     it("returns valid metadata", async () => {
       const { deployed } = await setup({});
 
